@@ -1,0 +1,11 @@
+export const numberMap = new Map<string, number>();
+numberMap.set("zero", 0);
+numberMap.set("one", 1);
+numberMap.set("two", 2);
+numberMap.set("three", 3);
+numberMap.set("four", 4);
+numberMap.set("five", 5);
+numberMap.set("six", 6);
+numberMap.set("seven", 7);
+numberMap.set("eight", 8);
+numberMap.set("nine", 9);
