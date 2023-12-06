@@ -9,6 +9,3 @@ numberMap.set("six", 6);
 numberMap.set("seven", 7);
 numberMap.set("eight", 8);
 numberMap.set("nine", 9);
-numberMap.set("sevenine", 79);
-numberMap.set("eighthree", 83);
-numberMap.set("eightwo", 82);
