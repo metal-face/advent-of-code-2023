@@ -8,47 +8,56 @@ interface Game {
 
 let possibleGamesSum: number = 0;
 
-const TOTAL_RED_CUBES: number = 12;
-const TOTAL_GREEN_CUBES: number = 13;
-const TOTAL_BLUE_CUBES: number = 14;
+const MAX_RED_CUBES: number = 12;
+const MAX_GREEN_CUBES: number = 13;
+const MAX_BLUE_CUBES: number = 14;
 
 const blueRegex: RegExp = /[0-9]+ blue/g;
 const greenRegex: RegExp = /[0-9]+ green/g;
 const redRegex: RegExp = /[0-9]+ red/g;
 
 function getColors(line: string, id: number): void {
-    const blueMatches: RegExpMatchArray = line.match(blueRegex);
-    const greenMatches: RegExpMatchArray = line.match(greenRegex);
-    const redMatches: RegExpMatchArray = line.match(redRegex);
+    const idRemoved = line.split(":");
+    const gameString = idRemoved[1].trim();
+    const splitGames = gameString.split(";");
 
-    let blueNumbers = blueMatches.map((item) => item.match(/^\d+/)[0]);
-    let greenNumbers = greenMatches.map((item) => item.match(/^\d+/)[0]);
-    let redNumbers = redMatches.map((item) => item.match(/^\d+/)[0]);
+    const gameArr: Game[] = [];
+    let possible: boolean = true;
 
-    const game: Game = {
-        red: 0,
-        blue: 0,
-        green: 0,
-    };
+    splitGames.forEach((game: string, i: number): void => {
+        const gameCount: Game = {
+            red: 0,
+            blue: 0,
+            green: 0,
+        };
 
-    blueNumbers.forEach((num) => {
-        game.blue += parseInt(num);
+        const blueMatches: RegExpMatchArray = game.match(blueRegex);
+        const greenMatches: RegExpMatchArray = game.match(greenRegex);
+        const redMatches: RegExpMatchArray = game.match(redRegex);
+
+        if (blueMatches) {
+            let blueNumbers = blueMatches.map((item) => item.match(/^\d+/)[0]);
+            gameCount.blue += parseInt(blueNumbers[0]);
+        }
+        if (greenMatches) {
+            let greenNumbers = greenMatches.map((item) => item.match(/^\d+/)[0]);
+            gameCount.green += parseInt(greenNumbers[0]);
+        }
+        if (redMatches) {
+            let redNumbers = redMatches.map((item) => item.match(/^\d+/)[0]);
+            gameCount.red += parseInt(redNumbers[0]);
+        }
+
+        if (gameCount.red > MAX_RED_CUBES || gameCount.blue > MAX_BLUE_CUBES || gameCount.green > MAX_GREEN_CUBES) {
+            possible = false;
+        } else {
+            gameArr.push(gameCount);
+        }
+
+        if (splitGames[i + 1] === undefined && possible === true) {
+            possibleGamesSum += id;
+        }
     });
-
-    greenNumbers.forEach((num) => {
-        game.green += parseInt(num);
-    });
-
-    redNumbers.forEach((num) => {
-        game.red += parseInt(num);
-    });
-
-    if (game.red <= TOTAL_RED_CUBES && game.blue <= TOTAL_BLUE_CUBES && game.green <= TOTAL_GREEN_CUBES) {
-        console.log(id, game);
-        possibleGamesSum += id;
-    } else {
-        console.log(game);
-    }
 }
 
 function exec() {
